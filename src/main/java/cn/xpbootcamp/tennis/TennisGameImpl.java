@@ -1,7 +1,5 @@
 package cn.xpbootcamp.tennis;
 
-import cn.xpbootcamp.tennis.TennisGame;
-
 public class TennisGameImpl implements TennisGame {
     public int P1point = 0;
     public int P2point = 0;
@@ -18,29 +16,15 @@ public class TennisGameImpl implements TennisGame {
 
     public String getScore() {
         String score = "";
-        if (DeuceCondition()) return "Deuce";
-
-        if (AllCondition()) return GetScoreName(P1point, score) + "-All";
 
         score = GetScoreName(P1point, score) + "-" + GetScoreName(P2point, score);
+
+        score = DrawCondition(score);
 
         score = AdvantageCondition(score);
 
         score = WinCondition(score);
         return score;
-    }
-
-    private boolean AllCondition() {
-        if (P1point == P2point && P1point < 4) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean DeuceCondition() {
-        if (P1point == P2point && P1point >= 3)
-            return true;
-        return false;
     }
 
     private String GetScoreName(int points, String score) {
@@ -52,6 +36,18 @@ public class TennisGameImpl implements TennisGame {
             score = "Thirty";
         if (points == 3) {
             score = "Forty";
+        }
+        return score;
+    }
+
+    private String DrawCondition(String score) {
+        if (P1point == P2point) {
+            if (P1point >= 3) {
+                score = "Deuce";
+            }
+            else {
+                score = GetScoreName(P1point, score) + "-All";
+            }
         }
         return score;
     }
