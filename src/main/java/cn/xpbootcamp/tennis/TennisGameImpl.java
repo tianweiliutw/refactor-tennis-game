@@ -18,64 +18,45 @@ public class TennisGameImpl implements TennisGame {
 
     public String getScore() {
         String score = "";
+        if (DeuceCondition()) return "Deuce";
+
+        if (AllCondition()) return GetScoreName(P1point, score) + "-All";
+
+        score = GetScoreName(P1point, score) + "-" + GetScoreName(P2point, score);
+
+        score = AdvantageCondition(score);
+
+        score = WinCondition(score);
+        return score;
+    }
+
+    private boolean AllCondition() {
         if (P1point == P2point && P1point < 4) {
-            if (P1point == 0)
-                score = "Love";
-            if (P1point == 1)
-                score = "Fifteen";
-            if (P1point == 2)
-                score = "Thirty";
-            score += "-All";
+            return true;
         }
+        return false;
+    }
+
+    private boolean DeuceCondition() {
         if (P1point == P2point && P1point >= 3)
-            score = "Deuce";
+            return true;
+        return false;
+    }
 
-        if (P1point > 0 && P2point == 0) {
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
-
-            P2res = "Love";
-            score = P1res + "-" + P2res;
+    private String GetScoreName(int points, String score) {
+        if (points == 0)
+            score = "Love";
+        if (points == 1)
+            score = "Fifteen";
+        if (points == 2)
+            score = "Thirty";
+        if (points == 3) {
+            score = "Forty";
         }
-        if (P2point > 0 && P1point == 0) {
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
+        return score;
+    }
 
-            P1res = "Love";
-            score = P1res + "-" + P2res;
-        }
-
-        if (P1point > P2point && P1point < 4) {
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > P1point && P2point < 4) {
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
-            score = P1res + "-" + P2res;
-        }
-
+    private String AdvantageCondition(String score) {
         if (P1point > P2point && P2point >= 3) {
             score = "Advantage player1";
         }
@@ -83,7 +64,10 @@ public class TennisGameImpl implements TennisGame {
         if (P2point > P1point && P1point >= 3) {
             score = "Advantage player2";
         }
+        return score;
+    }
 
+    private String WinCondition(String score) {
         if (P1point >= 4 && P2point >= 0 && (P1point - P2point) >= 2) {
             score = "Win for player1";
         }
